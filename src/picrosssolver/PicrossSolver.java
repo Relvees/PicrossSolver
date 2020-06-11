@@ -12,6 +12,8 @@ import java.nio.file.Paths;
  * @author Isaac
  * An attempt at a basic algorithm to interpret and solve Picross/Hanjie puzzles
  * (fw, its probably gonna suck, sorry if you have to read through this)
+ * 
+ * its on 2017 me, we didn't know any better at the time.
  */
 public class PicrossSolver {
     /*
@@ -38,6 +40,9 @@ public class PicrossSolver {
     CURRENT TO-DO:
     -build function to convert the 2d string arraylist into 3d int (which will be a bitch to manipulate i think)
     
+    -work out solutions to visualise the grid in an interactable format. perhaps a webform is a starting point.
+        -idea of using awt/swing to make a custom ui?
+        
     
     */
     public static void main(String[] args) {
@@ -47,8 +52,8 @@ public class PicrossSolver {
        String puzzle = "";
 
        Scanner read = new Scanner(System.in);
-       ArrayList<ArrayList<String>> puzVals = new ArrayList<ArrayList<String>>();
-       ArrayList<Integer> testPuz = new ArrayList<Integer>();
+       ArrayList<ArrayList<String>> puzVals = new ArrayList<>();
+       ArrayList<Integer> testPuz = new ArrayList<>();
 
        while(true){
        System.out.println("Select a Puzzle by filename, list with 'list', or exit with 'exit'");
@@ -89,7 +94,7 @@ public class PicrossSolver {
         for(int x=0; x<input.size(); x++){
             //get line of string
             String toSplit = input.get(x);
-            String trimmed = toSplit.replaceAll("(\\],)", ""); //removes all cases of [,
+            String trimmed = toSplit.replaceAll("(\\],)", ""); //removes all cases of ],
             trimmed = trimmed.replaceAll("(\\]{2})", ""); //removes case of ]]
             trimmed = trimmed.replaceAll("(\\[{2})", ""); //removes case of [[
             String[] split = trimmed.split("(\\[)"); //presumably splits on [
@@ -149,17 +154,52 @@ public class PicrossSolver {
     }
     public static void printArr(ArrayList<ArrayList<String>> arrIn){
         for(int x=0; x<arrIn.size(); x++){
-            System.out.println("\nrow " + (x+1));
+            switch (x){
+            case 0:
+                System.out.println("\nColumns");
+                break;
+            case 1:
+                System.out.println("\nRows");
+                break;
+            }
             for(int y=0; y<arrIn.get(x).size(); y++){
                 System.out.println(arrIn.get(x).get(y));
             }
         }
         //TODO
     }
-    public static void drawGrid(ArrayList<Integer> arrIn){
+    
+    public static void drawGrid(ArrayList<ArrayList<String>> arrIn){
         //for now: print the arrays in a text grid aligned like the puzzles
-        //in future, display this as some GUI with lickable grids, look into awt/swing i guess
-        //ArrayList<Integer> width = arrIn.get(0);
+        //in future, display this as some GUI with clickable grids, look into awt/swing i guess
+        int width = arrIn.get(0).size();
+        int height = arrIn.get(1).size();
+        
+        int[][][] gridArr = new int[width][height][1];
+        /*
+            Array structure:
+        [rows][columns][variable]
+        variable indicates the stauts of the cell in the grid
+        according values legend:
+            0 - Undetermined
+            1 - Filled (black space)
+            2 - Flagged (crossed space)
+        
+        */
+        
+        //initiate array, set all variables to undetermined/0
+        for(int x=0;x<width;x++){
+            for(int y=0; y<height; y++){
+                gridArr[x][y][0] = 0;
+            }
+        }
+        
+        
+        
+        //draw a grid... somewhere.
+        
+        //the exiting clause
+        
         return;
     }
 }
