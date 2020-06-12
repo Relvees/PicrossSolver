@@ -6,15 +6,33 @@ import java.nio.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
 
 /**
- *
  * @author Isaac
  * An attempt at a basic algorithm to interpret and solve Picross/Hanjie puzzles
  * (fw, its probably gonna suck, sorry if you have to read through this)
  * 
- * its on 2017 me, we didn't know any better at the time.
+ * its ok 2017 me, we didn't know any better at the time.
  */
+class display extends JFrame{
+    /*
+    drawing canvas elements to represent individual cells on the display
+    
+    how do we activate/deactivate the icons? 
+    degrees of on-click detection based on cursor position 
+    relative to the closest node?
+    Is there boundary detection
+    Suggestion of using JLabels due to inbuilt event handlers 
+    https://stackoverflow.com/questions/8023468/java-grid-of-clickable-elements
+    perhaps arrange this using a gridlayout?
+    https://docs.oracle.com/javase/tutorial/uiswing/layout/grid.html
+    */
+    
+}
+
 public class PicrossSolver {
     /*
     So how does this all work?
@@ -47,30 +65,36 @@ public class PicrossSolver {
     */
     public static void main(String[] args) {
         // TODO code application logic here
+        //drawGui(); //
+        testfunction(); // console-based array displayer
+    }
+    public static void testfunction(){
+        
        int colums = 0;
        int rows = 0;
-       String puzzle = "";
+       String selection = "";
 
        Scanner read = new Scanner(System.in);
        ArrayList<ArrayList<String>> puzVals = new ArrayList<>();
        ArrayList<Integer> testPuz = new ArrayList<>();
-
+        
        while(true){
        System.out.println("Select a Puzzle by filename, list with 'list', or exit with 'exit'");
-       puzzle = read.nextLine();
-       if(puzzle.equals("list")){
+       selection = read.nextLine();
+       if(selection.equals("list")){
             printPuzzles();
-            puzzle = "";
-       } else if (puzzle.equals("exit")){
+            selection = "";
+       } else if (selection.equals("exit")){
             System.out.println("Exiting Application");
             System.exit(0);
        } else {
-            puzzle = "ExPuzzles\\" + puzzle + ".txt";
-            puzVals = readFile(puzzle);
+            selection = "ExPuzzles\\" + selection + ".txt";
+            puzVals = readFile(selection);
             printArr(puzVals);
             //drawGrid(puzVals);
        }
        }//end while loop
+        
     }
     public static ArrayList<ArrayList<String>> readFile(String InArrURL) {
        /*
@@ -168,7 +192,6 @@ public class PicrossSolver {
         }
         //TODO
     }
-    
     public static void drawGrid(ArrayList<ArrayList<String>> arrIn){
         //for now: print the arrays in a text grid aligned like the puzzles
         //in future, display this as some GUI with clickable grids, look into awt/swing i guess
