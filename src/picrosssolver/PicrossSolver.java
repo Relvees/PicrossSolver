@@ -17,21 +17,6 @@ import javax.swing.*;
  * 
  * its ok 2017 me, we didn't know any better at the time.
  */
-class display extends JFrame{
-    /*
-    drawing canvas elements to represent individual cells on the display
-    
-    how do we activate/deactivate the icons? 
-    degrees of on-click detection based on cursor position 
-    relative to the closest node?
-    Is there boundary detection
-    Suggestion of using JLabels due to inbuilt event handlers 
-    https://stackoverflow.com/questions/8023468/java-grid-of-clickable-elements
-    perhaps arrange this using a gridlayout?
-    https://docs.oracle.com/javase/tutorial/uiswing/layout/grid.html
-    */
-    
-}
 
 public class PicrossSolver {
     /*
@@ -63,10 +48,68 @@ public class PicrossSolver {
         
     
     */
+    public static void testUI(){
+        /*
+        drawing canvas elements to represent individual cells on the display
+
+        how do we activate/deactivate the icons? 
+        degrees of on-click detection based on cursor position 
+        relative to the closest node?
+        Is there boundary detection
+        Suggestion of using JLabels due to inbuilt event handlers 
+        https://stackoverflow.com/questions/8023468/java-grid-of-clickable-elements
+        perhaps arrange this using a gridlayout?
+        https://docs.oracle.com/javase/tutorial/uiswing/layout/grid.html
+        */  
+        
+        
+        /*
+        class{
+            method{
+                jframe frameName = new jframe("windowTitle");
+                
+                classcomponent objectName = new classcomponent();
+                container.add(name) ;
+
+        a frame is main window with a layout
+        a frame contains a number of panes
+        a panel is a sub-part of a frame with a layout
+        a panel contains components
+        components can vary and are added FIFO
+        components are arranged into a pane or frame's layout
+        they also have event handelrs to execute code shenanegans.
+
+        a frame is packed with panes and then set visible
+        
+        */
+        Scanner read = new Scanner(System.in);
+        int testAmount = 0;
+        int y = 0;
+        System.out.println("how many (1-11)");
+        testAmount = Integer.parseInt(read.nextLine());
+        
+        JFrame testWindow = new JFrame("moderate understanding going on");
+        JPanel gridTest = new JPanel();
+        gridTest.setLayout(new GridLayout(4,3)); //(y,x)
+        gridTest.add(new JButton("Button initial"));
+        
+        for (int x=0; x<testAmount; x++){
+            y = x+1;
+            gridTest.add(new JButton("Button " + y));
+        }
+        
+        testWindow.add(gridTest, BorderLayout.NORTH);
+        testWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        testWindow.pack();
+        testWindow.setVisible(true);
+    }
+    
+    
     public static void main(String[] args) {
         // TODO code application logic here
         //drawGui(); //
-        testfunction(); // console-based array displayer
+        //testfunction(); // console-based array displayer
+        testUI();
     }
     public static void testfunction(){
         
