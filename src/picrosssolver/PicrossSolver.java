@@ -37,17 +37,46 @@ public class PicrossSolver {
     [[1],[2,2],[1,1],[2,2],[1,1]]
     [[3],[2,2],[0],[1,1],[4]]
     
-    */
-    
-    /*
     CURRENT TO-DO:
-    -build function to convert the 2d string arraylist into 3d int (which will be a bitch to manipulate i think)
     
     -work out solutions to visualise the grid in an interactable format. perhaps a webform is a starting point.
         -idea of using awt/swing to make a custom ui?
-        
-    
     */
+    
+    public static void main(String[] args) {
+        // TODO code application logic here
+        //readFile("ExPuzzles\\P1.txt");
+        //testUI(); //test function for generating a gui
+        testGridUI(); //a mockup of the structure
+        //testfunction(); // console-based array displayer
+        //now lets combine these mand make something hideous!
+        //loadPuzzle();
+    }
+    public static void testfunction(){
+       String selection = "";
+
+       Scanner read = new Scanner(System.in);
+       ArrayList<ArrayList<String>> puzVals = new ArrayList<>();
+       ArrayList<Integer> testPuz = new ArrayList<>();
+        
+       while(true){
+        System.out.println("Select a Puzzle by filename, list with 'list', or exit with 'exit'");
+        selection = read.nextLine();
+        if(selection.equals("list")){
+             printPuzzles();
+             selection = "";
+        } else if (selection.equals("exit")){
+             System.out.println("Exiting Application");
+             System.exit(0);
+        } else {
+             selection = "ExPuzzles\\" + selection + ".txt";
+             puzVals = readFile(selection);
+             printArr(puzVals);
+             //drawGrid(puzVals);
+        }
+       }//end while loop
+        
+    }
     public static void testUI(){
         /*
         drawing canvas elements to represent individual cells on the display
@@ -60,14 +89,9 @@ public class PicrossSolver {
         https://stackoverflow.com/questions/8023468/java-grid-of-clickable-elements
         perhaps arrange this using a gridlayout?
         https://docs.oracle.com/javase/tutorial/uiswing/layout/grid.html
-        */  
-        
-        
-        /*
         class{
             method{
                 jframe frameName = new jframe("windowTitle");
-                
                 classcomponent objectName = new classcomponent();
                 container.add(name) ;
 
@@ -103,41 +127,79 @@ public class PicrossSolver {
         testWindow.pack();
         testWindow.setVisible(true);
     }
-    
-    
-    public static void main(String[] args) {
-        // TODO code application logic here
-        //drawGui(); //
-        //testfunction(); // console-based array displayer
-        testUI();
-    }
-    public static void testfunction(){
+    public static void testGridUI(){
+        //variables used
+        int y = 0; //number for buttons
+        ArrayList<ArrayList<String>> puzVals = new ArrayList<>();
+        puzVals = readFile("ExPuzzles\\P2.txt"); //an example puzzle that looks like an 'up' arrow
+        int pCols = puzVals.get(0).size();
+        int pRows = puzVals.get(1).size();
+        int cellCount = pCols * pRows;        
         
-       int colums = 0;
-       int rows = 0;
-       String selection = "";
-
-       Scanner read = new Scanner(System.in);
-       ArrayList<ArrayList<String>> puzVals = new ArrayList<>();
-       ArrayList<Integer> testPuz = new ArrayList<>();
+        //define structure
+        JFrame gridFrame = new JFrame("moderate understanding going on");
+        JPanel leftPanel = new JPanel();
+        JPanel rightPanel = new JPanel();
+        JPanel lUpPanel = new JPanel();
+        JPanel lLowPanel = new JPanel();
+        JPanel rUpPanel = new JPanel();
+        JPanel rLowPanel = new JPanel();
+        gridFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-       while(true){
-       System.out.println("Select a Puzzle by filename, list with 'list', or exit with 'exit'");
-       selection = read.nextLine();
-       if(selection.equals("list")){
-            printPuzzles();
-            selection = "";
-       } else if (selection.equals("exit")){
-            System.out.println("Exiting Application");
-            System.exit(0);
-       } else {
-            selection = "ExPuzzles\\" + selection + ".txt";
-            puzVals = readFile(selection);
-            printArr(puzVals);
-            //drawGrid(puzVals);
-       }
-       }//end while loop
+        //define layouts
+        gridFrame.setLayout(new GridLayout(1,2)); //(y,x) (2-wide)
+        leftPanel.setLayout(new GridLayout(2,1)); //(y,x) (2-tall)
+        rightPanel.setLayout(new GridLayout(2,1)); //(y,x)
+        lUpPanel.setLayout(new GridLayout(1,1));
+        lLowPanel.setLayout(new GridLayout(pRows,1));
+        rUpPanel.setLayout(new GridLayout(1,pCols));
+        //rLowPanel.setLayout(new GridLayout(5,5)); //25 items, 5*5
+        rLowPanel.setLayout(new GridLayout(pRows,pCols)); 
+        //dynamic to loaded puzzle, should be 5*5
         
+        
+        //create test elements 
+        
+        /*
+        This should just be a dump of the array values as single labels for now.
+        0 = rows
+        1 = columns
+        */
+        //example column index
+        for (int x=0; x<pRows; x++){
+            lLowPanel.add(new JLabel(puzVals.get(0).get(x),4));
+            /*
+            public JLabel(String text,int horizontalAlignment)
+            horizontalAlignment - One of the following constants defined 
+            in SwingConstants: LEFT, CENTER, RIGHT, LEADING or TRAILING.
+            but this is an Integer, not string.
+            0 = centre
+            1 = error
+            2 = left
+            3 = error
+            4 = right??
+            oh java you silly.
+            */
+        }
+        
+        
+        //puzzle grid
+        for (int x=0; x<cellCount; x++){
+            y = x+1;
+            rLowPanel.add(new JButton(""));
+        }
+        
+        //final merge-up
+        leftPanel.add(lUpPanel);
+        leftPanel.add(lLowPanel);
+        rightPanel.add(rUpPanel);
+        rightPanel.add(rLowPanel);
+        gridFrame.add(leftPanel);
+        gridFrame.add(rightPanel);
+        
+        //render and display
+        gridFrame.pack();
+        gridFrame.setVisible(true);
     }
     public static ArrayList<ArrayList<String>> readFile(String InArrURL) {
        /*
@@ -161,7 +223,7 @@ public class PicrossSolver {
         for(int x=0; x<input.size(); x++){
             //get line of string
             String toSplit = input.get(x);
-            String trimmed = toSplit.replaceAll("(\\],)", ""); //removes all cases of ],
+            String trimmed = toSplit.replaceAll("(\\]\\,)", ""); //removes all cases of ],
             trimmed = trimmed.replaceAll("(\\]{2})", ""); //removes case of ]]
             trimmed = trimmed.replaceAll("(\\[{2})", ""); //removes case of [[
             String[] split = trimmed.split("(\\[)"); //presumably splits on [
@@ -196,9 +258,7 @@ public class PicrossSolver {
        }catch(IOException e){
            System.out.println("File's not there bro");
            System.exit(0);
-       } 
-       ArrayList<Integer> nothing = new ArrayList<Integer>();
-       nothing.add(0);
+       }
        return output;
     }
     public static void printPuzzles(){
@@ -235,37 +295,116 @@ public class PicrossSolver {
         }
         //TODO
     }
+    public static void loadPuzzle(){
+       String selection = "";
+
+       Scanner read = new Scanner(System.in);
+       ArrayList<ArrayList<String>> puzVals = new ArrayList<>();
+        
+       while(true){
+        System.out.println("Select a Puzzle by filename, list with 'list', or exit with 'exit'");
+        selection = read.nextLine();
+        if(selection.equals("list")){
+             printPuzzles();
+             selection = "";
+        } else if (selection.equals("exit")){
+             System.out.println("Exiting Application");
+             System.exit(0);
+        } else {
+             selection = "ExPuzzles\\" + selection + ".txt";
+             drawGrid(readFile(selection));
+        }
+       }//end while loop
+        
+    }
     public static void drawGrid(ArrayList<ArrayList<String>> arrIn){
-        //for now: print the arrays in a text grid aligned like the puzzles
-        //in future, display this as some GUI with clickable grids, look into awt/swing i guess
-        int width = arrIn.get(0).size();
-        int height = arrIn.get(1).size();
+        //to-do: build the gui to read in these values
+        //figure a way to represent them without utterly butchering the UI
         
-        int[][][] gridArr = new int[width][height][1];
-        /*
-            Array structure:
-        [rows][columns][variable]
-        variable indicates the stauts of the cell in the grid
-        according values legend:
-            0 - Undetermined
-            1 - Filled (black space)
-            2 - Flagged (crossed space)
+        int largestCol = 1;
+        int largestRow = 1;
+        int largestColID = 0;
+        int largestRowID = 0;
+        int currentSize = 1;
+        int compareLength = 1;
+        //represent the dimensions of each grid
+        int columns = arrIn.get(0).size();
+        int rows = arrIn.get(1).size();
         
-        */
-        
-        //initiate array, set all variables to undetermined/0
-        for(int x=0;x<width;x++){
-            for(int y=0; y<height; y++){
-                gridArr[x][y][0] = 0;
+        for (int x=0; x<columns; x++){
+            compareLength = arrIn.get(0).get(x).length();
+            if (compareLength>currentSize){
+                currentSize = compareLength;
+                largestColID = x;
             }
         }
+        largestCol = currentSize;
+        compareLength = 1;
+        for (int y=0; y<rows; y++){
+            compareLength = arrIn.get(1).get(y).length();
+            if (compareLength>currentSize){
+                currentSize = compareLength;
+                largestRowID = y;
+            }
+        }
+        largestRow = currentSize;
+        
+        //Need to be able to split on the commas whilst knowing the quantity. whiiiich is tricky.
+        /*
+        testPrint("ceiling 2.5 = " + Math.ceil(2.5));
+        testPrint("5/2 = " + 5/2);
+        testPrint("5.0/2 = " + 5.0/2);
+        testPrint("ceiling(5/2) = " + Math.ceil(5/2));
+        testPrint("5/2.0 = " + 5/2.0);
+        1           1,0,1
+        1,1         2,1,3
+        1,1,1       3,2,5
+        1,1,1,1     4,3,7
+        1,1,1,1,1   5,4,9
+        floor(n/2)+1
         
         
+        so we effectively need to create a frame/panel arrangement 
+        that follows a similar pattern to below
+        ________________________________________
+        | stats     |                          |
+        |           |            column        |
+        |   left    |  right        index      |
+        |   upper   |    upper                 |
+        |-----------|--------------------------|
+        |           |                          |
+        |  row      |       puzzle             |
+        |   index   |           grid           |
+        |           |                          |
+        |  left     |             right        |
+        |    lower  |               lower      |
+        |           |                          |
+        ----------------------------------------
+        initial layer is a left-right split of two panes
+        left contains the stats box, and the rows index
+        right contains the columns index, and the main puzzle grid
+        assuming you can multi-nest panes for whatever dumb reason
+        then this should work
         
-        //draw a grid... somewhere.
-        
-        //the exiting clause
-        
+        ________________________________________
+        | stats     |3 | | |                   |
+        | here      |2 |2| |    gridlayout     |
+        |  X*Y      |1 |1|1|    align-right    |
+        ----------------------------------------
+        |     |3|2|1|                          |
+        |         |1|                          |
+        |       |2|1|   gridlayout             |
+        |           |   bunch o buttons        |
+        |gridlayout |      go here             |
+        | labels    |                          |
+        |           | (imagine its all boxes)  |
+        |           |                          |
+        ----------------------------------------
+        */
+        return;
+    }
+    public static void testPrint(String valueIn){
+        System.out.println(valueIn);
         return;
     }
 }
