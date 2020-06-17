@@ -129,12 +129,46 @@ public class PicrossSolver {
     }
     public static void testGridUI(){
         //variables used
-        int y = 0; //number for buttons
         ArrayList<ArrayList<String>> puzVals = new ArrayList<>();
         puzVals = readFile("ExPuzzles\\P2.txt"); //an example puzzle that looks like an 'up' arrow
         int pCols = puzVals.get(0).size();
         int pRows = puzVals.get(1).size();
         int cellCount = pCols * pRows;        
+        
+        //converting index values to an actual Integer array
+        ArrayList<String> tempArr = new ArrayList<>();
+        ArrayList<ArrayList<Integer>> colIndex = new ArrayList<>();
+        ArrayList<ArrayList<Integer>> rowIndex = new ArrayList<>();
+        
+        //columns
+        for (int x=0; x<pCols; x++){
+            //get value of current column, split and parse to int array
+            String[] splitStr = puzVals.get(0).get(x).split("(\\,)");
+            Integer[] splitInt = new Integer[splitStr.length];
+            for (int z=0; z<splitStr.length; z++){
+                splitInt[z] = Integer.parseInt(splitStr[z]);
+            }
+            //assign to arraylist
+            ArrayList<Integer> outArrList = new ArrayList(Arrays.asList(splitInt));
+            colIndex.add(outArrList);
+        }
+        
+        //rows
+        //curIndex = puzVals.get(1);
+        for (int x=0; x<pRows; x++){
+            //get value of current column, split and parse to int array
+            String[] splitStr = puzVals.get(1).get(x).split("(\\,)");
+            Integer[] splitInt = new Integer[splitStr.length];
+            for (int z=0; z<splitStr.length; z++){
+                splitInt[z] = Integer.parseInt(splitStr[z]);
+            }
+            //assign to arraylist
+            ArrayList<Integer> outArrList = new ArrayList(Arrays.asList(splitInt));
+            rowIndex.add(outArrList);
+        }
+        
+//            String[] split = trimmed.split("(\\[)"); //presumably splits on [
+//            ArrayList<String> splitArr = new ArrayList(Arrays.asList(split));
         
         //define structure
         JFrame gridFrame = new JFrame("moderate understanding going on");
@@ -155,7 +189,7 @@ public class PicrossSolver {
         rUpPanel.setLayout(new GridLayout(1,pCols));
         //rLowPanel.setLayout(new GridLayout(5,5)); //25 items, 5*5
         rLowPanel.setLayout(new GridLayout(pRows,pCols)); 
-        //dynamic to loaded puzzle, should be 5*5
+        //dynamic to loaded puzzle instead
         
         
         //create test elements 
@@ -167,7 +201,13 @@ public class PicrossSolver {
         */
         //example column index
         for (int x=0; x<pRows; x++){
-            lLowPanel.add(new JLabel(puzVals.get(0).get(x),4));
+            //lLowPanel.add(new JLabel(puzVals.get(0).get(x),4));
+            //lazy option
+            //time for some /fun/
+            for (int y=0; y<colIndex.get(x).size(); y++){
+                
+            }
+            
             /*
             public JLabel(String text,int horizontalAlignment)
             horizontalAlignment - One of the following constants defined 
@@ -185,7 +225,6 @@ public class PicrossSolver {
         
         //puzzle grid
         for (int x=0; x<cellCount; x++){
-            y = x+1;
             rLowPanel.add(new JButton(""));
         }
         
